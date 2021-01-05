@@ -122,3 +122,8 @@ plot(FrequencyRange,abs(DSBTCFrequency));
 title('DSB-TC Frequency Domain');
 xlabel('Frequency');
 ylabel('Amplitude');
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Part 6 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Applying envelope filter
+envelopeDSBSC=abs(hilbert(DSBSCTime));
+envelopeDSBTC=abs(hilbert(DSBTCTime));
