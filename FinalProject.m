@@ -33,3 +33,12 @@ plot(frequencyRange,abs(frequencyDomainSignal));
 title('Original Signal in Frequency Domain');
 ylabel('Amplitude');
 xlabel('Frequency');
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Part 2 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%initialize cut off frequency
+cutoffFrequency=4000/(Fs/2);
+%using a low pass filter
+[denumerator,numerator]=butter(20,cutoffFrequency,'low');
+filteredSignalTime=filter(denumerator,numerator,signal);
+
