@@ -61,3 +61,64 @@ xlabel('Frequency');
 
 sound(filteredSignalTime,Fs);
 pause(5);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Part 5 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%  DSB-SC  %%%%%%%%%%%%%%%%
+
+%Carrier frequency
+Fc=100000;
+%Sampling frequency
+Fm=5*Fc;
+%Signal resampling from Fs freq. to Fm freq.
+resampledSignal=resample(filteredSignalTime,Fm,Fs);
+samplesNumber=length(resampledSignal);
+%time range
+time=linspace(0,samplesNumber/Fm, samplesNumber);
+%freqyency Range
+FrequencyRange=-(Fm/2) : Fm/samplesNumber : (Fm/2) - Fm/samplesNumber;
+%Carrier signal
+carrierSignal=cos(2*pi*Fc*time);
+%DSC-SC in time domain
+%transpose to overcome the unmatched matrix and out of memory issue 
+DSBSCTime=resampledSignal.*transpose(carrierSignal);
+%DSC-SC in frequency domain
+DSBSCFrequency=fftshift(fft(DSBSCTime));
+%Show figure 3
+figure ('Name','DOUBLE SIDEBAND MODULATION','NumberTitle','off');
+subplot(2,1,1);
+plot(DSBSCTime);
+title('DSB-SC Time Domain');
+xlabel('Time');
+ylabel('Amplitude');
+subplot(2,1,2);
+plot(FrequencyRange,abs(DSBSCFrequency));
+title('DSB-SC Frequency Domain');
+xlabel('Frequency');
+ylabel('Amplitude');
+
+%%%%%%%%%%%%%%%%  DSB-TC  %%%%%%%%%%%%%%%%
+% modulation index
+modulationIndex=0.5;
+% Carrier amplitude
+Ac=2*max(resampledSignal);
+% m(t) = x(n)/ max(x(n)) Normalized Signal
+normalizedSignal=resampledSignal/max(resampledSignal);
+carrierSignal=Ac*carrierSignal;
+% DSB-TC time domaim
+DSBTCTime=(1+(modulationIndex*normalizedSignal)).*transpose(carrierSignal);
+% DSB-TC frequency domaim
+DSBTCFrequency=fftshift(fft(DSBTCTime));
+
+%Show figure 4
+figure ('Name','DOUBLE SIDEBAND MODULATION','NumberTitle','off');
+subplot(2,1,1);
+plot(time,DSBTCTime);
+title('DSB-TC Time Domain');
+xlabel('Time');
+ylabel('Amplitude');
+subplot(2,1,2);
+plot(FrequencyRange,abs(DSBTCFrequency));
+title('DSB-TC Frequency Domain');
+xlabel('Frequency');
+ylabel('Amplitude');
