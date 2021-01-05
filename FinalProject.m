@@ -56,3 +56,8 @@ plot(frequencyRange,abs(filteredSignalFrequency));
 title('Signal filtered by Low pass filter in Frequency Domain');
 ylabel('Amplitude');
 xlabel('Frequency');
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Part 4 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+sound(filteredSignalTime,Fs);
+pause(5);
