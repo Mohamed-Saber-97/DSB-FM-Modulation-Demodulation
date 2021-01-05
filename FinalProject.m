@@ -127,3 +127,31 @@ ylabel('Amplitude');
 %Applying envelope filter
 envelopeDSBSC=abs(hilbert(DSBSCTime));
 envelopeDSBTC=abs(hilbert(DSBTCTime));
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Part 7 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%Resampling the signal again to it's original frequency
+ResampledenvelopeDSBSC=resample(envelopeDSBSC,Fs,Fm);
+samplesNumber=length(ResampledenvelopeDSBSC);
+time=linspace(0,samplesNumber/Fs, samplesNumber);
+%generating sound with Fs freq.
+sound(ResampledenvelopeDSBSC, Fs);
+%Show figure 5
+figure ('Name','DOUBLE SIDEBAND MODULATION','NumberTitle','off');
+plot(time,ResampledenvelopeDSBSC);
+title('Resampled Envelope DSB-SC');
+xlabel('Time');
+ylabel('Amplitude');
+pause(10);
+ 
+ResampledenvelopeDSBTC=resample(envelopeDSBTC,Fs,Fm);
+samplesNumber=length(ResampledenvelopeDSBTC);
+time=linspace(0,samplesNumber/Fs, samplesNumber);
+sound(ResampledenvelopeDSBTC, Fs);
+%Show figure 6
+figure ('Name','DOUBLE SIDEBAND MODULATION','NumberTitle','off');
+plot(time,ResampledenvelopeDSBTC);
+title('Resampled Envelope DSB-TC');
+xlabel('Time');
+ylabel('Amplitude');
+pause(5);
