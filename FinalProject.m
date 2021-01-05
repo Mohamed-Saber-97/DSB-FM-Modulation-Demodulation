@@ -156,7 +156,6 @@ xlabel('Time');
 ylabel('Amplitude');
 pause(5);
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%% Part 8 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %add white gausian noises
@@ -410,7 +409,6 @@ xlabel('Frequency');
 ylabel('Amplitude');
 pause(10);
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%% EXPERIMENT ONE: DOUBLE SIDEBAND MODULATION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%% Part 1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -493,4 +491,3 @@ envelopeNBFD=abs(hilbert(NBFD));
 %Resampling  
 %Fm = 5Fc
 ResampledenvelopeNBFD=resample(envelopeNBFD,Fs,Fm);
-
