@@ -409,3 +409,88 @@ title('DSB-SC Demodulation with Phase Error=20 degree SNR=30 Frequency Domain');
 xlabel('Frequency');
 ylabel('Amplitude');
 pause(10);
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%% EXPERIMENT ONE: DOUBLE SIDEBAND MODULATION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Part 1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%  Time Domain  %%%%%%%%%%%%%%%%
+[signal,Fs] = audioread('eric.wav'); samplesNumber = length(signal);
+time= linspace(0,samplesNumber/Fs,samplesNumber);
+frequencyDomainSignal=fftshift(fft(signal));
+frequencyRange=(-Fs/2:Fs/samplesNumber:Fs/2-Fs/samplesNumber);
+figure ('Name','FREQUENCY MODULATION','NumberTitle','off');
+subplot(2,1,1);
+plot(time,signal);
+title('Original Signal in Time Domain');
+ylabel('Amplitude');
+xlabel('Time');
+subplot(2,1,2);
+plot(frequencyRange,abs(frequencyDomainSignal));
+title('Original Signal in Frequency Domain');
+ylabel('Amplitude');
+xlabel('Frequency');
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Part 2 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%initialize cut off frequency
+cutoffFrequency=4000/(Fs/2);
+%using a low pass filter
+[denumerator,numerator]=butter(20,cutoffFrequency,'low');
+filteredSignalTime=filter(denumerator,numerator,signal);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Part 3 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+filteredSignalFrequency=fftshift(fft(filteredSignalTime));
+%Show figure 2
+figure ('Name','FREQUENCY MODULATION','NumberTitle','off');
+subplot(2,1,1);
+plot(time,filteredSignalTime);
+title('Signal filtered by Low pass filter in Time Domain');
+ylabel('Amplitude');
+xlabel('Time');
+subplot(2,1,2);
+plot(frequencyRange,abs(filteredSignalFrequency));
+title('Signal filtered by Low pass filter in Frequency Domain');
+ylabel('Amplitude');
+xlabel('Frequency');
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Part 4 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+sound(filteredSignalTime,Fs);
+pause(5);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Part 5 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Fc=100000;
+resampledSignal=resample(filteredSignalTime,Fm,Fs);
+time=linspace(0,length(resampledSignal)/(Fm),length(resampledSignal))
+%Integeration of m(t)
+MessageIntegeration=cumsum(resampledSignal');
+NBFMTime=cos((2*pi*Fc*time)+MessageIntegeration)
+samplesNumber = length(NBFMTime);
+FrequencyRange=(-(Fm)/2:(Fm)/samplesNumber:(Fm)/2-(Fm)/samplesNumber);
+NBFMFrequency=fftshift(fft(NBFMTime));
+figure ('Name','FREQUENCY MODULATION','NumberTitle','off');
+subplot(2,1,1);
+plot(time,NBFMTime);
+title('NBFM Signal in Time Domain');
+xlabel('Time')
+ylabel('Amplitude');
+subplot(2,1,2);
+plot(FrequencyRange,abs(NBFMFrequency));
+title('NBFM Signal in Frequency Domain');
+xlabel('Frequency')
+ylabel('Amplitude');
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Part 6 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%NB frequency demodulation
+NBFD=diff(NBFMTime);
+%Creating a matrix
+NBFD=[0,NBFD];
+%Envelope detector
+envelopeNBFD=abs(hilbert(NBFD));
+%Resampling  
+%Fm = 5Fc
+ResampledenvelopeNBFD=resample(envelopeNBFD,Fs,Fm);
+
